@@ -45,4 +45,72 @@ public struct LocalUserSettings: Codable {
 		self.theme = theme
 		self.validator_time = validator_time
 	}
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.accepted_application = try container.decode(Bool.self, forKey: .accepted_application)
+        
+        do {
+            self.default_listing_type = try container.decode(ListingType.self, forKey: .default_listing_type)
+        } catch {
+            let old = try container.decode(Int.self, forKey: .default_listing_type)
+            switch old {
+            case 1:
+                self.default_listing_type = .local
+            case 2:
+                self.default_listing_type = .subscribed
+            case 3:
+                self.default_listing_type = .community
+            default:
+                self.default_listing_type = .all
+            }
+        }
+        
+        do {
+            self.default_sort_type = try container.decode(SortType.self, forKey: .default_sort_type)
+        } catch {
+            let old = try container.decodeIfPresent(Int.self, forKey: .default_sort_type)
+            switch old {
+            case 1:
+                self.default_sort_type = .hot
+            case 9:
+                self.default_sort_type = .mostComments
+            case 2:
+                self.default_sort_type = .new
+            case 10:
+                self.default_sort_type = .newComments
+            case 3:
+                self.default_sort_type = .old
+            case 8:
+                self.default_sort_type = .topAll
+            case 4:
+                self.default_sort_type = .topDay
+            case 6:
+                self.default_sort_type = .topMonth
+            case 5:
+                self.default_sort_type = .topWeek
+            case 7:
+                self.default_sort_type = .topYear
+            case 0:
+                self.default_sort_type = .active
+            default:
+                throw error
+            }
+        }
+        
+        self.email = try container.decodeIfPresent(String.self, forKey: .email)
+        self.email_verified = try container.decode(Bool.self, forKey: .email_verified)
+        self.id = try container.decode(Int.self, forKey: .id)
+        self.interface_language = try container.decode(String.self, forKey: .interface_language)
+        self.person_id = try container.decode(Int.self, forKey: .person_id)
+        self.send_notifications_to_email = try container.decode(Bool.self, forKey: .send_notifications_to_email)
+        self.show_avatars = try container.decode(Bool.self, forKey: .show_avatars)
+        self.show_bot_accounts = try container.decode(Bool.self, forKey: .show_bot_accounts)
+        self.show_new_post_notifs = try container.decode(Bool.self, forKey: .show_new_post_notifs)
+        self.show_nsfw = try container.decode(Bool.self, forKey: .show_nsfw)
+        self.show_read_posts = try container.decode(Bool.self, forKey: .show_read_posts)
+        self.show_scores = try container.decode(Bool.self, forKey: .show_scores)
+        self.theme = try container.decode(String.self, forKey: .theme)
+        self.validator_time = try container.decode(String.self, forKey: .validator_time)
+    }
 }

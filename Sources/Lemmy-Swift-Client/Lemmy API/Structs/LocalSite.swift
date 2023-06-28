@@ -61,4 +61,47 @@ public struct LocalSite: Codable {
 		self.slur_filter_regex = slur_filter_regex
 		self.updated = updated
 	}
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.actor_name_max_length = try container.decode(Int.self, forKey: .actor_name_max_length)
+        self.application_email_admins = try container.decode(Bool.self, forKey: .application_email_admins)
+        self.application_question = try container.decodeIfPresent(String.self, forKey: .application_question)
+        self.captcha_difficulty = try container.decode(String.self, forKey: .captcha_difficulty)
+        self.captcha_enabled = try container.decode(Bool.self, forKey: .captcha_enabled)
+        self.community_creation_admin_only = try container.decode(Bool.self, forKey: .community_creation_admin_only)
+        self.default_post_listing_type = try container.decode(String.self, forKey: .default_post_listing_type)
+        self.default_theme = try container.decode(String.self, forKey: .default_theme)
+        self.enable_downvotes = try container.decode(Bool.self, forKey: .enable_downvotes)
+        self.enable_nsfw = try container.decode(Bool.self, forKey: .enable_nsfw)
+        self.federation_debug = try container.decodeIfPresent(Bool.self, forKey: .federation_debug)
+        self.federation_enabled = try container.decode(Bool.self, forKey: .federation_enabled)
+        self.federation_worker_count = try container.decode(Int.self, forKey: .federation_worker_count)
+        self.hide_modlog_mod_names = try container.decode(Bool.self, forKey: .hide_modlog_mod_names)
+        self.id = try container.decode(Int.self, forKey: .id)
+        self.legal_information = try container.decodeIfPresent(String.self, forKey: .legal_information)
+        self.private_instance = try container.decode(Bool.self, forKey: .private_instance)
+        self.published = try container.decode(Date.self, forKey: .published)
+        do {
+            self.registration_mode = try container.decode(RegistrationMode.self, forKey: .registration_mode)
+        } catch {
+            let old = try container.decode(String.self, forKey: .registration_mode)
+            switch old {
+            case "open":
+                self.registration_mode = .open
+            case "closed":
+                self.registration_mode = .closed
+            case "requireApplication":
+                self.registration_mode = .requireApplication
+            default:
+                throw error
+            }
+        }
+        self.reports_email_admins = try container.decode(Bool.self, forKey: .reports_email_admins)
+        self.require_email_verification = try container.decode(Bool.self, forKey: .require_email_verification)
+        self.site_id = try container.decode(Int.self, forKey: .site_id)
+        self.site_setup = try container.decode(Bool.self, forKey: .site_setup)
+        self.slur_filter_regex = try container.decodeIfPresent(String.self, forKey: .slur_filter_regex)
+        self.updated = try container.decodeIfPresent(Date.self, forKey: .updated)
+    }
 }
