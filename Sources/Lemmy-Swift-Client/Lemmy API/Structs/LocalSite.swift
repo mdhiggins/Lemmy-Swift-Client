@@ -76,7 +76,7 @@ public struct LocalSite: Codable {
         self.enable_nsfw = try container.decode(Bool.self, forKey: .enable_nsfw)
         self.federation_debug = try container.decodeIfPresent(Bool.self, forKey: .federation_debug)
         self.federation_enabled = try container.decode(Bool.self, forKey: .federation_enabled)
-        self.federation_worker_count = try container.decode(Int.self, forKey: .federation_worker_count)
+        self.federation_worker_count = try container.decodeIfPresent(Int.self, forKey: .federation_worker_count)
         self.hide_modlog_mod_names = try container.decode(Bool.self, forKey: .hide_modlog_mod_names)
         self.id = try container.decode(Int.self, forKey: .id)
         self.legal_information = try container.decodeIfPresent(String.self, forKey: .legal_information)
