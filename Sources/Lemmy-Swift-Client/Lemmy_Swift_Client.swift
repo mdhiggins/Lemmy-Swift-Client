@@ -57,9 +57,7 @@ public class LemmyAPI {
 	}
 
 	/// Do request to lemmy server and return URLSession result
-	public func baseRequest<T: APIRequest>(_ apiRequest: T) async throws
-		-> (T.Response, URLResponse, Data)
-	{
+	public func urlRequest<T: APIRequest>(_ apiRequest: T) throws -> URLRequest {
 		var request = URLRequest(url: baseUrl.appending(path: T.path))
 		request.httpMethod = T.httpMethod.rawValue
 		let encoder = JSONEncoder()
@@ -83,7 +81,15 @@ public class LemmyAPI {
 			request.httpBody = try encoder.encode(apiRequest)
 		}
 		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-		let (data, response) = try await urlSession.data(for: request)
+		return request
+	}
+
+	/// Do request to lemmy server and return URLSession result
+	public func baseRequest<T: APIRequest>(_ apiRequest: T) async throws
+		-> (T.Response, URLResponse, Data)
+	{
+		let request = try urlRequest(apiRequest)
+		let (data, response) = try await URLSession.shared.data(for: request)
 		if let urlResponse = response as? HTTPURLResponse,
 		   urlResponse.statusCode != 200
 		{ throw LemmyAPIError.badResponse(

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct LocalSite: Codable {
+public struct LocalSite: Codable, Identifiable, Hashable {
 	public let actor_name_max_length: Int
 	public let application_email_admins: Bool
 	public let application_question: String?
@@ -13,7 +13,7 @@ public struct LocalSite: Codable {
 	public let enable_nsfw: Bool
 	public let federation_debug: Bool?
 	public let federation_enabled: Bool
-	public let federation_worker_count: Int
+	public let federation_worker_count: Int?
 	public let hide_modlog_mod_names: Bool
 	public let id: Int
 	public let legal_information: String?
@@ -38,9 +38,9 @@ public struct LocalSite: Codable {
 		default_theme: String,
 		enable_downvotes: Bool,
 		enable_nsfw: Bool,
-		federation_debug: Bool?,
+		federation_debug: Bool? = nil,
 		federation_enabled: Bool,
-		federation_worker_count: Int,
+		federation_worker_count: Int? = nil,
 		hide_modlog_mod_names: Bool,
 		id: Int,
 		legal_information: String? = nil,

@@ -30,7 +30,7 @@ public struct GetSiteResponse: APIResponse {
 		discussion_languages: [Int],
 		federated_instances: FederatedInstances? = nil,
 		my_user: MyUserInfo? = nil,
-		online: Int?,
+		online: Int? = nil,
 		site_view: SiteView,
 		taglines: [Tagline]? = nil,
 		version: String

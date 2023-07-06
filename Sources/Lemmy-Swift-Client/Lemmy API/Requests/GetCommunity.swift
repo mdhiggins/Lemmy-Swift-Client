@@ -30,7 +30,7 @@ public struct GetCommunityResponse: APIResponse {
 		default_post_language: Int? = nil,
 		discussion_languages: [Int],
 		moderators: [CommunityModeratorView],
-		online: Int?,
+		online: Int? = nil,
 		site: Site? = nil
 	) {
 		self.community_view = community_view
