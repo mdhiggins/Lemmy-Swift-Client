@@ -101,7 +101,6 @@ public class LemmyAPI {
 		let decoder = JSONDecoder()
 		decoder.dateDecodingStrategy = LemmyAPI.dateDecodingStrategy
 		do {
-			let (data, response) = try await URLSession.shared.data(for: request)
 			let decodedResult = try decoder.decode(T.Response.self, from: data)
 			return (decodedResult, response, data)
 		} catch {
