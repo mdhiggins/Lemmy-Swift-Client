@@ -1,5 +1,9 @@
 import Foundation
 
+struct LemmyError: Codable {
+	let error: String
+}
+
 public enum LemmyAPIError: Error, CustomStringConvertible, LocalizedError {
 	case badResponse(response: URLResponse, request: URLRequest, data: Data)
 	case invalidResponse(response: HTTPURLResponse, request: URLRequest, data: Data)
@@ -7,8 +11,11 @@ public enum LemmyAPIError: Error, CustomStringConvertible, LocalizedError {
 
 	public var description: String {
 		switch self {
-		case .badResponse(response: _, request: _, data: _):
-			return "Bad response from server"
+		case .badResponse(response: _, request: _, data: let data):
+			guard let error = try? JSONDecoder().decode(LemmyError.self, from: data) else {
+				return "Bad response from server"
+			}
+			return "Server error: \(error.error)"
 		case .invalidResponse(response: let response, request: _, data: _):
 			return "Invalid response from server, status code \(response.statusCode)"
 		case .decodeError(let error, data: _, request: _):
